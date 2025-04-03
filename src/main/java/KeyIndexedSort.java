@@ -11,26 +11,39 @@ public class KeyIndexedSort {
      * @param d Character position to sort by (0-indexed)
      */
     public static void sortByPosition(String[] a, int d) {
+        //let us store length of array into variable called "n"
         int n = a.length;
+
+        //if array has only 1 element no need to sort at all
         if (n <= 1) return;
 
+        //let us create extra space we can store string based count frequency
         String[] aux = new String[n];
-        int[] count = new int[R + 2];  // +2 to handle -1 (end-of-string)
+        //will maintain count frequency
+        int[] count = new int[R + 2];
 
-        // Student TODO:
-        // 1. Compute frequency counts
-       
-        // 2. Transform counts to indices
-       
-        // 3. Distribute to auxiliary array
-        
-        // 4. Copy back to original array
+        //let us first count the number of frequency
+        for (String s : a) {
+            count[charAt(s, d) + 2]++;  // Shift index by 2 to handle -1 case
+        }
 
+        //let convert our number count into the index
+        for (int r = 0; r < R + 1; r++) {
+            count[r + 1] += count[r];
+        }
 
+        //let fill up the array with each string
+        for (String s : a) {
+            aux[count[charAt(s, d) + 1]++] = s;
+        }
+
+        //let copy back to our original array which given as input
+        System.arraycopy(aux, 0, a, 0, n);
     }
 
     // Get d-th character or -1 if out of bounds
     private static int charAt(String s, int d) {
+
         return d < s.length() ? s.charAt(d) : -1;
     }
 
@@ -49,17 +62,17 @@ public class KeyIndexedSort {
         return true;
     }
 
-    // Example usage
+
     public static void main(String[] args) {
         String[] words = {"apple", "banana", "kiwi", "grape", "pear"};
-        
+
         // Sort by 2nd character (index 1)
         sortByPosition(words, 1);
-        
+
         for (String word : words) {
             System.out.println(word);
         }
-        
+
         System.out.println("Sorted correctly: " + isSorted(words, 1));
     }
 }
